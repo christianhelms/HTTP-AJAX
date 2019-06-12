@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import {Route} from 'react-router-dom'
 import './App.css';
+import Friends from './Components/Friends'
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  constructor(){
+    super()
+    this.state = {
+      friendsList: [],
+      
+    };
+  }
+
+  componentDidMount() {
+    axios
+    .get(`http://localhost:5000/friends`)
+    .then(friends => {
+      this.setState(() => ({ friendsList: friends.data }));
+      console.log(friends);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
+
+  render() {
+    return(
+      <div class="App">
+      <h1>Friends List!</h1>
+      <Friends friends={this.state.friendsList}/>
+      </div>
+    );
+  };
+};
 
 export default App;
